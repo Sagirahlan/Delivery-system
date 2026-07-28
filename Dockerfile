@@ -41,6 +41,8 @@ EXPOSE 10000
 
 # Start Laravel server binding to 0.0.0.0 and PORT
 CMD php artisan key:generate --force || true && \
+    php artisan migrate --force || true && \
+    php artisan db:seed --class=RoleSeeder --force || true && \
     php artisan storage:link || true && \
     php artisan config:cache || true && \
     php artisan route:cache || true && \
