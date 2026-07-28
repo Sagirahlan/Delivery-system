@@ -1,0 +1,31 @@
+@extends('layouts.metronic')
+@section('title', 'Create Agent')
+@section('body_class', 'aside-enabled')
+@section('page_title', 'Create Agent')
+@section('page_subtitle', 'Add a new delivery agent')
+@section('sidebar')@include('partials.admin-sidebar')@endsection
+@section('container_class', 'container-xxl')
+
+@section('content')
+<div class="row justify-content-center"><div class="col-lg-8">
+<div class="card card-flush">
+    <div class="card-header py-4"><h3 class="card-title fw-bolder text-dark fs-4">New Agent Account</h3></div>
+    <div class="card-body">
+        <form method="POST" action="{{ route('admin.agents.store') }}">
+            @csrf
+            <div class="mb-4"><label class="form-label fw-semibold fs-6">Full Name</label><input type="text" name="name" class="form-control form-control-solid" value="{{ old('name') }}" required></div>
+            <div class="mb-4"><label class="form-label fw-semibold fs-6">Email</label><input type="email" name="email" class="form-control form-control-solid" value="{{ old('email') }}" required></div>
+            <div class="mb-4"><label class="form-label fw-semibold fs-6">Phone</label><input type="tel" name="phone" class="form-control form-control-solid" value="{{ old('phone') }}"></div>
+            <div class="row g-4 mb-6">
+                <div class="col-6"><label class="form-label fw-semibold fs-6">Password</label><input type="password" name="password" class="form-control form-control-solid" required></div>
+                <div class="col-6"><label class="form-label fw-semibold fs-6">Confirm</label><input type="password" name="password_confirmation" class="form-control form-control-solid" required></div>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-lg flex-grow-1"><i class="ki-duotone ki-plus fs-4 me-2"><span class="path1"></span><span class="path2"></span></i>Create Agent</button>
+                <a href="{{ route('admin.agents.index') }}" class="btn btn-outline btn-lg">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</div></div>
+@endsection

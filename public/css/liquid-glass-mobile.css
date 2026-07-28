@@ -1,0 +1,517 @@
+/**
+ * Liquid Glass (iOS 26 / visionOS inspired) & Android Mobile View CSS
+ * Fluid translucent design system with light refraction, dynamic wall adaptation, and mobile shell.
+ */
+
+:root {
+    /* Liquid Glass Light Tokens */
+    --liquid-glass-bg: rgba(255, 255, 255, 0.68);
+    --liquid-glass-bg-hover: rgba(255, 255, 255, 0.82);
+    --liquid-glass-border: rgba(255, 255, 255, 0.75);
+    --liquid-glass-border-subtle: rgba(0, 0, 0, 0.08);
+    --liquid-glass-highlight: rgba(255, 255, 255, 0.95);
+    --liquid-glass-shadow: 0 20px 50px -10px rgba(31, 38, 135, 0.14), inset 0 1.5px 1px rgba(255, 255, 255, 0.85);
+    --liquid-glass-glow-orange: rgba(255, 140, 0, 0.25);
+    --liquid-glass-glow-green: rgba(14, 124, 74, 0.22);
+    --liquid-glass-glow-blue: rgba(108, 92, 231, 0.2);
+    --liquid-text-primary: #0f172a;
+    --liquid-text-secondary: #475569;
+    --liquid-text-muted: #64748b;
+    --liquid-dock-bg: rgba(255, 255, 255, 0.78);
+    --liquid-input-bg: rgba(255, 255, 255, 0.55);
+}
+
+[data-bs-theme="dark"] {
+    /* Liquid Glass Dark Tokens */
+    --liquid-glass-bg: rgba(18, 24, 38, 0.62);
+    --liquid-glass-bg-hover: rgba(26, 34, 52, 0.78);
+    --liquid-glass-border: rgba(255, 255, 255, 0.16);
+    --liquid-glass-border-subtle: rgba(255, 255, 255, 0.08);
+    --liquid-glass-highlight: rgba(255, 255, 255, 0.25);
+    --liquid-glass-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.65), inset 0 1.5px 1px rgba(255, 255, 255, 0.35);
+    --liquid-glass-glow-orange: rgba(255, 140, 0, 0.35);
+    --liquid-glass-glow-green: rgba(16, 185, 129, 0.3);
+    --liquid-glass-glow-blue: rgba(129, 140, 248, 0.3);
+    --liquid-text-primary: #f8fafc;
+    --liquid-text-secondary: #cbd5e1;
+    --liquid-text-muted: #94a3b8;
+    --liquid-dock-bg: rgba(15, 23, 42, 0.82);
+    --liquid-input-bg: rgba(255, 255, 255, 0.05);
+}
+
+/* ==========================================================================
+   Ambient Wall Refracting Background Mesh
+   ========================================================================== */
+.liquid-mesh-container {
+    position: relative;
+    min-height: 100vh;
+    z-index: 0;
+}
+
+.liquid-mesh-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+    background: 
+        radial-gradient(circle at 12% 18%, var(--liquid-glass-glow-orange), transparent 45%),
+        radial-gradient(circle at 88% 28%, var(--liquid-glass-glow-green), transparent 48%),
+        radial-gradient(circle at 50% 85%, var(--liquid-glass-glow-blue), transparent 52%);
+    background-size: 130% 130%;
+    animation: liquidDrift 28s ease-in-out infinite alternate;
+}
+
+@keyframes liquidDrift {
+    0% { background-position: 0% 0%, 0% 0%, 0% 0%; }
+    50% { background-position: 8% 6%, -8% -6%, 5% -4%; }
+    100% { background-position: -6% 8%, 6% -8%, -5% 6%; }
+}
+
+/* ==========================================================================
+   Liquid Glass Components & Cards
+   ========================================================================== */
+.liquid-glass-card {
+    background: var(--liquid-glass-bg) !important;
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid var(--liquid-glass-border) !important;
+    box-shadow: var(--liquid-glass-shadow) !important;
+    border-radius: 24px !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.liquid-glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--liquid-glass-highlight), transparent);
+    opacity: 0.8;
+}
+
+.liquid-glass-card:hover {
+    background: var(--liquid-glass-bg-hover) !important;
+    transform: translateY(-3px) scale(1.008);
+    border-color: rgba(255, 140, 0, 0.4) !important;
+    box-shadow: 0 30px 60px -15px rgba(255, 140, 0, 0.2), inset 0 1.5px 1px rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Specular Glass Pill Controls & Buttons */
+.liquid-glass-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 9999px !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: var(--liquid-glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--liquid-glass-border);
+    box-shadow: var(--liquid-glass-shadow);
+    color: var(--liquid-text-primary);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none !important;
+}
+
+.liquid-glass-pill:hover {
+    background: linear-gradient(135deg, #ff8c00 0%, #ff6b00 100%) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: 0 8px 24px rgba(255, 140, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+    transform: translateY(-2px);
+}
+
+.liquid-glass-btn-primary {
+    background: linear-gradient(135deg, #ff8c00 0%, #ff6b00 100%) !important;
+    color: #ffffff !important;
+    border-radius: 9999px !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(255, 140, 0, 0.35), inset 0 1.5px 1px rgba(255, 255, 255, 0.6) !important;
+    font-weight: 700;
+    padding: 12px 28px;
+    backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+}
+
+.liquid-glass-btn-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 14px 40px rgba(255, 140, 0, 0.5), inset 0 1.5px 1px rgba(255, 255, 255, 0.8) !important;
+    color: #fff !important;
+}
+
+/* Translucent Glass Inputs */
+.liquid-glass-input {
+    background: var(--liquid-input-bg) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid var(--liquid-glass-border) !important;
+    border-radius: 16px !important;
+    color: var(--liquid-text-primary) !important;
+    padding: 12px 18px !important;
+    transition: all 0.3s ease !important;
+}
+
+.liquid-glass-input:focus {
+    background: var(--liquid-glass-bg-hover) !important;
+    border-color: #ff8c00 !important;
+    box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+    outline: none !important;
+}
+
+/* Glass Status Badges */
+.liquid-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--liquid-glass-border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.liquid-badge-primary {
+    background: rgba(255, 140, 0, 0.15);
+    color: #ff8c00;
+    border-color: rgba(255, 140, 0, 0.3);
+}
+
+.liquid-badge-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.liquid-badge-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.liquid-badge-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ==========================================================================
+   Android Mobile App Header & Status Bar
+   ========================================================================== */
+.android-status-bar {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 20px 2px 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--liquid-text-primary);
+    background: var(--liquid-glass-bg);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--liquid-glass-border-subtle);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    z-index: 100;
+}
+
+@media (max-width: 991.98px) {
+    .android-status-bar {
+        display: flex;
+    }
+
+    body.customer-route {
+        padding-bottom: 90px !important;
+    }
+}
+
+/* ==========================================================================
+   Floating Liquid Glass Bottom Navigation Dock (iOS 26 / Android)
+   ========================================================================== */
+.liquid-glass-dock {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 20px);
+    max-width: 540px;
+    z-index: 1050;
+    background: var(--liquid-dock-bg);
+    backdrop-filter: blur(30px) saturate(210%);
+    -webkit-backdrop-filter: blur(30px) saturate(210%);
+    border: 1px solid var(--liquid-glass-border);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1.5px 1px rgba(255, 255, 255, 0.5);
+    border-radius: 9999px;
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-dock-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 5px 8px;
+    border-radius: 9999px;
+    color: var(--liquid-text-muted);
+    text-decoration: none !important;
+    font-size: 0.65rem;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    position: relative;
+    white-space: nowrap;
+}
+
+.liquid-dock-item i {
+    font-size: 1.25rem;
+    transition: transform 0.25s ease;
+}
+
+.liquid-dock-item:hover {
+    color: #ff8c00;
+    transform: translateY(-2px);
+}
+
+.liquid-dock-item.active {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #ff8c00 0%, #ff6b00 100%);
+    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    padding: 6px 16px;
+}
+
+.liquid-dock-item.active i {
+    transform: scale(1.1);
+}
+
+.liquid-dock-center-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff8c00 0%, #ff4500 100%);
+    color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(255, 140, 0, 0.5), inset 0 1.5px 1px rgba(255, 255, 255, 0.7);
+    margin-top: -16px;
+    border: 3px solid var(--liquid-dock-bg);
+    transition: all 0.3s ease;
+}
+
+.liquid-dock-center-btn:hover {
+    transform: scale(1.1) translateY(-3px);
+    box-shadow: 0 14px 32px rgba(255, 140, 0, 0.65);
+}
+
+/* ==========================================================================
+   Android Mobile Frame View Simulator Mode
+   ========================================================================== */
+.android-device-shell {
+    max-width: 430px;
+    margin: 0 auto;
+    border-radius: 40px;
+    border: 10px solid #1e293b;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    background: var(--liquid-glass-bg);
+}
+
+/* Hide mobile dock on desktop unless forced */
+@media (min-width: 992px) {
+    .liquid-glass-dock {
+        display: flex;
+        bottom: 24px;
+        width: 480px;
+    }
+}
+
+/* ==========================================================================
+   Clean Professional Mobile Header Rules
+   ========================================================================== */
+@media (max-width: 991.98px) {
+    #kt_header {
+        height: 60px !important;
+        min-height: 60px !important;
+        padding: 0 12px !important;
+        background: var(--liquid-glass-bg) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border-bottom: 1px solid var(--liquid-glass-border-subtle) !important;
+    }
+
+    #kt_header_container {
+        flex-wrap: nowrap !important;
+        height: 100% !important;
+        padding: 0 4px !important;
+    }
+
+    #kt_header_nav {
+        display: none !important;
+    }
+
+    .page-title {
+        max-width: 55% !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        margin-right: 0 !important;
+    }
+
+    .page-title h1 {
+        font-size: 1.05rem !important;
+        line-height: 1.2 !important;
+        margin-bottom: 0 !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .page-title small,
+    .page-title .breadcrumb {
+        display: none !important;
+    }
+
+    .header-menu {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   GLOBAL SYSTEM-WIDE LIQUID GLASS OVERRIDES (orders/place design for ALL pages)
+   ========================================================================== */
+
+/* Global Cards */
+.card,
+.card-flush,
+.card-hover {
+    background: var(--liquid-glass-bg) !important;
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid var(--liquid-glass-border) !important;
+    box-shadow: var(--liquid-glass-shadow) !important;
+    border-radius: 24px !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before,
+.card-flush::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--liquid-glass-highlight), transparent);
+    opacity: 0.8;
+}
+
+.card:hover,
+.card-flush:hover {
+    background: var(--liquid-glass-bg-hover) !important;
+    border-color: rgba(255, 140, 0, 0.4) !important;
+    box-shadow: 0 30px 60px -15px rgba(255, 140, 0, 0.2), inset 0 1.5px 1px rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Global Form Controls */
+.form-control,
+.form-select,
+.form-control-solid,
+.form-select-solid {
+    background: var(--liquid-input-bg) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid var(--liquid-glass-border) !important;
+    border-radius: 16px !important;
+    color: var(--liquid-text-primary) !important;
+    padding: 12px 18px !important;
+    transition: all 0.3s ease !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: var(--liquid-glass-bg-hover) !important;
+    border-color: #ff8c00 !important;
+    box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+    outline: none !important;
+}
+
+/* Global Tables */
+.table {
+    --bs-table-bg: transparent !important;
+    --bs-table-accent-bg: transparent !important;
+    color: var(--liquid-text-primary) !important;
+}
+
+.table th {
+    border-bottom: 1px solid var(--liquid-glass-border) !important;
+    color: var(--liquid-text-muted) !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.table td {
+    border-bottom: 1px solid var(--liquid-glass-border-subtle) !important;
+}
+
+/* Global Buttons */
+.btn-primary {
+    background: linear-gradient(135deg, #ff8c00 0%, #ff6b00 100%) !important;
+    color: #ffffff !important;
+    border-radius: 9999px !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(255, 140, 0, 0.35), inset 0 1.5px 1px rgba(255, 255, 255, 0.6) !important;
+    font-weight: 700 !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 14px 40px rgba(255, 140, 0, 0.5), inset 0 1.5px 1px rgba(255, 255, 255, 0.8) !important;
+    color: #fff !important;
+}
+
+/* Global Badges */
+.badge-light-primary {
+    background: rgba(255, 140, 0, 0.15) !important;
+    color: #ff8c00 !important;
+    border: 1px solid rgba(255, 140, 0, 0.3) !important;
+    backdrop-filter: blur(12px) !important;
+    border-radius: 9999px !important;
+}
+
+.badge-light-success {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #10b981 !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    backdrop-filter: blur(12px) !important;
+    border-radius: 9999px !important;
+}
+
+.badge-light-warning {
+    background: rgba(245, 158, 11, 0.15) !important;
+    color: #f59e0b !important;
+    border: 1px solid rgba(245, 158, 11, 0.3) !important;
+    backdrop-filter: blur(12px) !important;
+    border-radius: 9999px !important;
+}
+
+.badge-light-danger {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    backdrop-filter: blur(12px) !important;
+    border-radius: 9999px !important;
+}
