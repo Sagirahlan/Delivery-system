@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: PHP Application
-FROM php:8.3-cli
+FROM php:8.4-cli
 
 # Install system dependencies & PHP extensions
 RUN apt-get update && apt-get install -y \
@@ -32,7 +32,7 @@ COPY . .
 COPY --from=frontend-builder /app/public/build ./public/build
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-req=php+
 
 # Storage link and caching setup during startup
 ENV PORT=10000
