@@ -1,0 +1,11 @@
+/node_modules
+/vendor
+/public/build
+/public/hot
+.env
+.env.*
+.git
+.github
+.phpunit.cache
+storage/*.key
+storage/logs/*
